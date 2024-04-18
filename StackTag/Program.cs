@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 MigrateDatabase(app);
 
@@ -19,8 +20,10 @@ if (app.Environment.IsDevelopment())
     ConfigureDevelopmentServices(app);
 }
 app.UseCors();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+logger.LogInformation("Open localhost:5000/swagger");
 app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
@@ -44,13 +47,15 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "StackTagAPI", Version = "v1" });
+        c.IncludeXmlComments((Path.Combine(AppContext.BaseDirectory,
+        $"{Assembly.GetExecutingAssembly().GetName().Name}.xml")));
     });
 
     services.AddCors(options =>
     {
         options.AddDefaultPolicy(builder =>
         {
-            builder.WithOrigins("http://localhost:8080")
+            builder.WithOrigins("http://localhost:8085")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
@@ -101,27 +106,6 @@ void ConfigureDevelopmentServices(WebApplication app)
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "StackTagAPI v1");
     });
-
-    Task.Run(() => OpenSwaggerInBrowser(app.Services.GetRequiredService<ILogger<Program>>()));
-}
-
-void OpenSwaggerInBrowser(ILogger<Program> logger)
-{
-    Task.Delay(5000).Wait();
-    var containerPort = Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Split(';').FirstOrDefault()?.Split(':').LastOrDefault();
-    if (containerPort != null)
-    {
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = "cmd",
-            Arguments = $"/c start http://localhost:{containerPort}/swagger",
-            CreateNoWindow = true
-        });
-    }
-    else
-    {
-        logger.LogError("Failed to retrieve the container port.");
-    }
 }
 
 public partial class Program { }

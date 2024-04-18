@@ -11,8 +11,6 @@ paths:
   /tag/request:
     get:
       summary: Retrieve tags from Stack Overflow API
-      produces:
-        - 'text/plain'
       responses:
         '200':
           description: Successful operation
@@ -23,8 +21,6 @@ paths:
   /tag/refresh:
     get:
       summary: Refresh tags by deleting existing tags and fetching new ones from Stack Overflow API
-      produces:
-        - 'text/plain'
       responses:
         '200':
           description: Successful operation
@@ -35,8 +31,6 @@ paths:
   /tag/paginate:
     get:
       summary: Get paginated tags
-      produces:
-        - 'text/plain'
       parameters:
         - name: pageNumber
           in: query
