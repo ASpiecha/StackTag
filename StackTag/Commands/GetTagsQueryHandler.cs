@@ -25,10 +25,10 @@ namespace StackTag.Commands
                 switch (request.SortBy.ToLower())
                 {
                     case "name":
-                        tags = request.SortOrder.ToLower() == "asc" ? tags.OrderBy(t => t.Name).ToList() : tags.OrderByDescending(t => t.Name).ToList();
+                        tags = request.SortOrder.ToLower() == "desc" ? tags.OrderByDescending(t => t.Name).ToList() : tags.OrderBy(t => t.Name).ToList();
                         break;
                     case "percentage":
-                        tags = request.SortOrder.ToLower() == "asc" ? tags.OrderBy(t => t.Percentage).ToList() : tags.OrderByDescending(t => t.Percentage).ToList();
+                        tags = request.SortOrder.ToLower() == "desc" ? tags.OrderByDescending(t => t.Percentage).ToList() : tags.OrderBy(t => t.Percentage).ToList();
                         break;
                     default:
                         tags = tags.OrderBy(t => t.Name).ToList();
