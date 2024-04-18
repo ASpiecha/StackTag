@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  sql_server2022:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server2022
+    restart: always
+    environment:
+      - ACCEPT_EULA=y
+      - MSSQL_SA_PASSWORD=ssmsPass1!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+
+  stacktag:
+    image: ${DOCKER_REGISTRY-}stacktag
+    container_name: stacktag
+    build:
+      context: .
+      dockerfile: StackTag/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - sql_server2022
+    environment:
+      - SQL_SERVER=sql_server2022
+      - SQL_USER=sa
+      - SQL_PASSWORD=ssmsPass1!
+      - SQL_DB=TagDatabase
+      - SQL_PORT=1433
+
+  swagger-ui:
+   image: swaggerapi/swagger-ui
+   container_name: swagger_ui_container
+   ports:
+      - "8080:8080"
+   volumes:
+      - ./doc:/usr/share/nginx/html/doc
+   environment: 
+     API_URL: /doc/api.yaml

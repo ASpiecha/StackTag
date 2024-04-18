@@ -1,0 +1,65 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: StackTag API
+  description: API for managing tags from Stack Overflow
+host: localhost:5000
+basePath: /
+schemes:
+  - http
+paths:
+  /tag/request:
+    get:
+      summary: Retrieve tags from Stack Overflow API
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+          schema:
+            type: string
+  /tag/refresh:
+    get:
+      summary: Refresh tags by deleting existing tags and fetching new ones from Stack Overflow API
+      responses:
+        '200':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+  /tag/paginate:
+    get:
+      summary: Get paginated tags
+      parameters:
+        - name: pageNumber
+          in: query
+          description: Page number
+          required: false
+          type: integer
+          format: int32
+        - name: pageSize
+          in: query
+          description: Page size
+          required: false
+          type: integer
+          format: int32
+        - name: sortBy
+          in: query
+          description: Sort by - name or percentage
+          required: false
+          type: string
+        - name: sortOrder
+          in: query
+          description: Sort order - asc or desc
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
