@@ -19,6 +19,10 @@ namespace StackTag.Controllers
             _logger = logger;
             _mediator = mediator;
         }
+        /// <summary>
+        /// Retrieve tags from Stack Overflow API
+        /// </summary>
+        /// <returns> Number of collected tags</returns>
         [HttpGet("request")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401, Type = typeof(string))]
@@ -32,6 +36,10 @@ namespace StackTag.Controllers
             }
             return Ok(jsonString);
         }
+        /// <summary>
+        /// Refresh tags by deleting existing tags and fetching new ones from Stack Overflow API
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("refresh")]
         public async Task<IActionResult> RefreshTags()
         {
@@ -47,6 +55,11 @@ namespace StackTag.Controllers
                 return Unauthorized("Error occurred while refreshing tags");
             }
         }
+        /// <summary>
+        /// Get paginated tags
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet("paginate")]
         public async Task<IActionResult> GetPaginatedTags([FromQuery] GetTagsQuery query)
         {

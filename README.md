@@ -1,6 +1,6 @@
 1. Make sure docker deamon is running
 2. docker-compose up in solution root directory
-3. Open localhost:8080
+3. Open localhost:5000/swagger
 
 REST API w .NET 8 i C#, wewnętrznie oparte o listę tagów dostarczanych przez API StackOverflow (https://api.stackexchange.com/docs). Założenia projektu:
 
