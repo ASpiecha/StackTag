@@ -34,8 +34,7 @@ namespace StackTag.Commands
                         tags = tags.OrderBy(t => t.Name).ToList();
                         break;
                 }
-
-                var paginatedTags = tags.Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToList();
+                var paginatedTags = tags.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
 
                 return paginatedTags;
             }
